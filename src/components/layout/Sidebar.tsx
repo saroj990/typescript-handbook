@@ -73,7 +73,7 @@ export function Sidebar() {
       <aside
         id="course-sidebar"
         className={cn(
-          "fixed top-[calc(3.5rem+env(safe-area-inset-top))] bottom-0 left-0 z-40 flex w-[min(20rem,88vw)] flex-col border-r border-[var(--border)] bg-[var(--bg-elevated)] shadow-[var(--shadow)] transition-transform duration-200 ease-out lg:static lg:top-auto lg:z-0 lg:w-72 lg:translate-x-0 lg:bg-transparent lg:shadow-none",
+          "fixed top-[calc(3.5rem+env(safe-area-inset-top))] bottom-0 left-0 z-40 flex w-[min(20rem,88vw)] flex-col overflow-hidden border-r border-[var(--border)] bg-[var(--bg-elevated)] shadow-[var(--shadow)] transition-transform duration-200 ease-out lg:sticky lg:top-[calc(3.5rem+env(safe-area-inset-top))] lg:z-0 lg:h-[calc(100dvh-3.5rem-env(safe-area-inset-top))] lg:w-72 lg:translate-x-0 lg:self-start lg:bg-transparent lg:shadow-none",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
         aria-label="Course navigation"
@@ -84,7 +84,7 @@ export function Sidebar() {
             <X className="size-5" />
           </Button>
         </div>
-        <nav className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4">
+        <nav className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4">
           <div className="space-y-1">
             <NavLink to="/" current={location.pathname === "/"} onClick={close}>
               Home
