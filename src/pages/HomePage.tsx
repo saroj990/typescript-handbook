@@ -18,7 +18,7 @@ export function HomePage() {
     <div className="mx-auto max-w-4xl space-y-8">
       <section className="space-y-4">
         <p className="text-sm font-medium text-[var(--accent)]">Beginner → Advanced</p>
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">
           TypeScript Course & Handbook
         </h1>
         <p className="max-w-2xl text-lg text-[var(--text-muted)]">

@@ -95,7 +95,7 @@ export function ExercisePanel({ lessonId, exercise }: ExercisePanelProps) {
   }
 
   return (
-    <section className="my-8 rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 sm:p-5">
+    <section className="my-8 rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-3 sm:p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">
@@ -168,7 +168,7 @@ export function ExercisePanel({ lessonId, exercise }: ExercisePanelProps) {
               }
             >
               <MonacoEditor
-                height="240px"
+                height="200px"
                 language="typescript"
                 theme={monacoTheme}
                 value={code}

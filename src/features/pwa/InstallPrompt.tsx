@@ -31,7 +31,7 @@ export function InstallPrompt() {
   if (!event && !offline) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 shadow-[var(--shadow)]">
+    <div className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 shadow-[var(--shadow)] sm:inset-x-auto sm:right-4">
       {offline ? (
         <p className="text-sm">You're offline. Cached lessons and exercises still work.</p>
       ) : null}

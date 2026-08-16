@@ -15,11 +15,24 @@ export function AppLayout() {
   const hydrated = useProgressStore((state) => state.hydrated);
   const location = useLocation();
   const navigate = useNavigate();
-  const setSearchOpen = useUiStore((state) => state.setSearchOpen);
+  const setSidebarOpen = useUiStore((state) => state.setSidebarOpen);
 
   useEffect(() => {
     if (!hydrated) void hydrate();
   }, [hydrate, hydrated]);
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname, setSidebarOpen]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (media.matches) setSidebarOpen(false);
+    };
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, [setSidebarOpen]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -46,7 +59,7 @@ export function AppLayout() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [location.pathname, navigate, setSearchOpen]);
+  }, [location.pathname, navigate]);
 
   useEffect(() => {
     const slug = location.pathname.startsWith("/lesson/")
@@ -62,11 +75,11 @@ export function AppLayout() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-dvh bg-[var(--bg)] text-[var(--text)]">
+      <div className="min-h-dvh overflow-x-hidden bg-[var(--bg)] text-[var(--text)]">
         <TopBar />
         <div className="mx-auto flex min-h-[calc(100dvh-3.5rem)] max-w-[1400px]">
           <Sidebar />
-          <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
+          <main className="min-w-0 flex-1 px-3 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-6 lg:px-8">
             <Outlet />
           </main>
         </div>

@@ -52,30 +52,41 @@ export function LessonPage() {
   return (
     <article className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_16rem]">
       <div className="min-w-0">
-        <nav className="mb-4 text-sm text-[var(--text-muted)]" aria-label="Breadcrumb">
+        <nav
+          className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[var(--text-muted)]"
+          aria-label="Breadcrumb"
+        >
           <Link to="/course" className="hover:text-[var(--text)]">
             Course
           </Link>
-          <span className="px-2">/</span>
-          <span>{section?.title}</span>
-          <span className="px-2">/</span>
-          <span className="text-[var(--text)]">{lesson.title}</span>
+          <span aria-hidden>/</span>
+          <span className="truncate">{section?.title}</span>
+          <span className="hidden sm:inline" aria-hidden>
+            /
+          </span>
+          <span className="hidden text-[var(--text)] sm:inline">{lesson.title}</span>
         </nav>
-        <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
-          <div>
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+          <div className="min-w-0">
             <p className="text-sm text-[var(--text-muted)]">
               {lesson.level} · {lesson.estimatedMinutes} min
             </p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">{lesson.title}</h1>
             <p className="mt-2 max-w-2xl text-[var(--text-muted)]">{lesson.description}</p>
           </div>
-          <div className="flex gap-2">
-            <Button size="sm" onClick={() => toggleBookmark(lesson.id)} aria-pressed={bookmarked}>
+          <div className="flex w-full gap-2 sm:w-auto">
+            <Button
+              size="sm"
+              className="flex-1 sm:flex-none"
+              onClick={() => toggleBookmark(lesson.id)}
+              aria-pressed={bookmarked}
+            >
               <Bookmark className={`size-4 ${bookmarked ? "fill-current" : ""}`} />
               {bookmarked ? "Bookmarked" : "Bookmark"}
             </Button>
             <Button
               size="sm"
+              className="flex-1 sm:flex-none"
               variant={completed ? "secondary" : "primary"}
               onClick={() => completeLesson(lesson.id, lesson.slug)}
             >
@@ -121,22 +132,22 @@ export function LessonPage() {
           </ul>
         </section>
 
-        <div className="mt-10 flex flex-wrap justify-between gap-3 border-t border-[var(--border)] pt-6">
+        <div className="mt-10 flex flex-col gap-3 border-t border-[var(--border)] pt-6 sm:flex-row sm:justify-between">
           {adjacent.prev ? (
-            <Link to={`/lesson/${adjacent.prev.slug}`}>
-              <Button>
-                <ChevronLeft className="size-4" />
-                {adjacent.prev.title}
+            <Link to={`/lesson/${adjacent.prev.slug}`} className="min-w-0 sm:max-w-[48%]">
+              <Button className="w-full max-w-full justify-start">
+                <ChevronLeft className="size-4 shrink-0" />
+                <span className="truncate">{adjacent.prev.title}</span>
               </Button>
             </Link>
           ) : (
             <span />
           )}
           {adjacent.next ? (
-            <Link to={`/lesson/${adjacent.next.slug}`}>
-              <Button variant="primary">
-                {adjacent.next.title}
-                <ChevronRight className="size-4" />
+            <Link to={`/lesson/${adjacent.next.slug}`} className="min-w-0 sm:max-w-[48%]">
+              <Button variant="primary" className="w-full max-w-full justify-end">
+                <span className="truncate">{adjacent.next.title}</span>
+                <ChevronRight className="size-4 shrink-0" />
               </Button>
             </Link>
           ) : null}

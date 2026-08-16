@@ -68,13 +68,14 @@ export function CodePlayground({ id, title, initialCode }: CodePlaygroundProps) 
             {title ?? "Try it yourself"}
           </h3>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
           <Button size="sm" onClick={() => void copy()} aria-label="Copy code">
             {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-            Copy
+            <span className="hidden sm:inline">Copy</span>
           </Button>
           <Button
             size="sm"
+            aria-label="Reset code"
             onClick={() => {
               setCode(initialCode);
               setLogs([]);
@@ -83,7 +84,7 @@ export function CodePlayground({ id, title, initialCode }: CodePlaygroundProps) 
             }}
           >
             <RotateCcw className="size-3.5" />
-            Reset
+            <span className="hidden sm:inline">Reset</span>
           </Button>
           <Button
             size="sm"
@@ -97,16 +98,16 @@ export function CodePlayground({ id, title, initialCode }: CodePlaygroundProps) 
           </Button>
         </div>
       </div>
-      <div className="min-h-[220px] border-b border-[var(--border)]">
+      <div className="min-h-[180px] border-b border-[var(--border)] sm:min-h-[220px]">
         <Suspense
           fallback={
-            <div className="flex h-[220px] items-center justify-center text-sm text-[var(--text-muted)]">
+            <div className="flex h-[180px] items-center justify-center text-sm text-[var(--text-muted)] sm:h-[220px]">
               Loading editor…
             </div>
           }
         >
           <MonacoEditor
-            height="220px"
+            height="180px"
             language="typescript"
             theme={monacoTheme}
             value={code}

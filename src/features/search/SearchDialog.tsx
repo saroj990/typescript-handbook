@@ -28,13 +28,13 @@ export function SearchDialog() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-[12vh]">
+    <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/50 p-0 sm:items-start sm:p-4 sm:pt-[12vh]">
       <button className="absolute inset-0" aria-label="Close search" onClick={() => setSearchOpen(false)} />
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Search the course"
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] shadow-[var(--shadow)]"
+        className="relative flex h-full w-full max-w-2xl flex-col overflow-hidden border-[var(--border)] bg-[var(--bg-elevated)] shadow-[var(--shadow)] sm:h-auto sm:rounded-2xl sm:border"
       >
         <input
           autoFocus
@@ -43,7 +43,7 @@ export function SearchDialog() {
           placeholder="Search TypeScript…"
           className="w-full border-b border-[var(--border)] bg-transparent px-4 py-3 text-base outline-none"
         />
-        <ul className="max-h-[50vh] overflow-y-auto p-2">
+        <ul className="max-h-none flex-1 overflow-y-auto p-2 sm:max-h-[50vh]">
           {query && results.length === 0 ? (
             <li className="px-3 py-6 text-sm text-[var(--text-muted)]">No matching lessons or exercises.</li>
           ) : null}

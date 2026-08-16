@@ -20,7 +20,7 @@ export function CoursePage() {
       </div>
       <div className="space-y-4">
         {sections.map(({ section, lessons, completed, percent }) => (
-          <Card key={section.id} className="p-5">
+          <Card key={section.id} className="p-4 sm:p-5">
             <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-xl font-semibold">{section.title}</h2>
@@ -36,10 +36,12 @@ export function CoursePage() {
                 <li key={lesson.id}>
                   <Link
                     to={`/lesson/${lesson.slug}`}
-                    className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm hover:bg-[var(--bg-muted)]"
+                    className="flex items-center justify-between gap-3 rounded-lg px-2 py-2 text-sm hover:bg-[var(--bg-muted)]"
                   >
-                    <span>{lesson.title}</span>
-                    <span className="text-[var(--text-muted)]">{lesson.estimatedMinutes} min</span>
+                    <span className="min-w-0">{lesson.title}</span>
+                    <span className="shrink-0 text-[var(--text-muted)]">
+                      {lesson.estimatedMinutes} min
+                    </span>
                   </Link>
                 </li>
               ))}
