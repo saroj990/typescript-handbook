@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --color-ts: #3178c6;
+  --color-ts-bright: #4b9bde;
+}
+
+:root {
+  color-scheme: light;
+  --bg: #f6f7fb;
+  --bg-elevated: #ffffff;
+  --bg-muted: #eef2f7;
+  --border: #d7deea;
+  --text: #101828;
+  --text-muted: #475467;
+  --accent: #3178c6;
+  --accent-fg: #ffffff;
+  --danger: #b42318;
+  --success: #067647;
+  --warning: #b54708;
+  --shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --bg-elevated: #121a2b;
+  --bg-muted: #172033;
+  --border: #243049;
+  --text: #e8eef7;
+  --text-muted: #9aa8c0;
+  --accent: #4b9bde;
+  --accent-fg: #071018;
+  --danger: #f97066;
+  --success: #47cd89;
+  --warning: #fdb022;
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  isolation: isolate;
+}
+
+.text-sm-size {
+  font-size: 15px;
+}
+
+.text-md-size {
+  font-size: 16px;
+}
+
+.text-lg-size {
+  font-size: 18px;
+}
+
+.prose-lesson h2 {
+  font-size: 1.35rem;
+  line-height: 1.3;
+  margin: 2rem 0 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.prose-lesson h3 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.prose-lesson p,
+.prose-lesson li {
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.prose-lesson p {
+  margin: 0.85rem 0;
+}
+
+.prose-lesson ul,
+.prose-lesson ol {
+  margin: 0.75rem 0 0.75rem 1.2rem;
+}
+
+.prose-lesson li + li {
+  margin-top: 0.35rem;
+}
+
+.prose-lesson code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.35rem;
+}
+
+.prose-lesson pre {
+  overflow-x: auto;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 0.85rem;
+  padding: 1rem 1.1rem;
+  margin: 1rem 0;
+  border: 1px solid #1e293b;
+}
+
+.prose-lesson pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: 0.86rem;
+}
+
+.prose-lesson blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.15rem 0 0.15rem 1rem;
+  margin: 1rem 0;
+  color: var(--text-muted);
+}
+
+.prose-lesson a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-lesson table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+
+.prose-lesson th,
+.prose-lesson td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--bg-muted);
+  border-radius: 0.35rem;
+  padding: 0.05rem 0.35rem;
+}
