@@ -106,6 +106,44 @@ console.log(name.toUpperCase(), count + 1);
           },
         ],
       },
+      {
+        id: "first-item",
+        type: "write-code",
+        title: "Return the first item",
+        prompt:
+          "Write `first<T>(items: T[]): T | undefined` that returns the first element, or undefined if the array is empty.",
+        starterCode: `function first(items) {
+  return undefined;
+}
+`,
+        solution: `function first<T>(items: T[]): T | undefined {
+  return items[0];
+}
+`,
+        hints: ["Add a type parameter T.", "items[0] is T or undefined."],
+        tests: [
+          { id: "found", description: 'first(["a", "b"]) === "a"', expression: 'first(["a", "b"]) === "a"' },
+          { id: "empty", description: "first([]) === undefined", expression: "first([]) === undefined" },
+        ],
+      },
+      {
+        id: "why-not-any",
+        type: "multiple-choice",
+        title: "Why not identity(value: any)?",
+        prompt: "What is wrong with writing `function identity(value: any): any`?",
+        solution: "It compiles, but it throws away the useful type. identity(\"ts\") should stay a string.",
+        hints: ["any opts out of checking.", "The caller should get the same type back."],
+        choices: [
+          { id: "a", label: "any is not allowed as a parameter type", correct: false },
+          {
+            id: "b",
+            label: "It compiles, but it throws away the useful type of the argument",
+            correct: true,
+          },
+          { id: "c", label: "It cannot return the same value it received", correct: false },
+          { id: "d", label: "It only works with objects", correct: false },
+        ],
+      },
     ],
     takeaways: [
       "Generics keep types while sharing implementation.",
@@ -203,6 +241,44 @@ console.log(pluck(user, "name"));
             description: "reads id",
             expression: 'getId({ id: "u1", name: "Ada" }) === "u1"',
           },
+        ],
+      },
+      {
+        id: "longest-of-two",
+        type: "write-code",
+        title: "Return the longer value",
+        prompt:
+          "Write `longest(a, b)` that returns whichever argument has the greater `.length`. It should work for strings and arrays.",
+        starterCode: `function longest(a, b) {
+  return a;
+}
+`,
+        solution: `function longest<T extends { length: number }>(a: T, b: T): T {
+  return a.length >= b.length ? a : b;
+}
+`,
+        hints: ["Constrain T to { length: number }.", "Compare a.length and b.length."],
+        tests: [
+          { id: "str", description: "longer string", expression: 'longest("Ada", "Linus") === "Linus"' },
+          {
+            id: "arr",
+            description: "longer array",
+            expression: "longest([1], [1, 2, 3]).length === 3",
+          },
+        ],
+      },
+      {
+        id: "keyof-meaning",
+        type: "multiple-choice",
+        title: "What is keyof T?",
+        prompt: "For `const user = { id: 1, name: \"Ada\" }`, what is `keyof typeof user`?",
+        solution: '"id" | "name" — the union of property names.',
+        hints: ["keyof produces a union of keys.", "Those keys are string literal types."],
+        choices: [
+          { id: "a", label: "string", correct: false },
+          { id: "b", label: '"id" | "name"', correct: true },
+          { id: "c", label: "number", correct: false },
+          { id: "d", label: "User", correct: false },
         ],
       },
     ],
@@ -317,6 +393,75 @@ function label(result: Result<string>): string {
             description: "error branch",
             expression: 'label({ ok: false, error: "nope" }) === "Error: nope"',
           },
+        ],
+      },
+      {
+        id: "request-label",
+        type: "write-code",
+        title: "Render a request state",
+        prompt:
+          "Given `type State = { status: \"loading\" } | { status: \"success\"; data: string } | { status: \"error\"; error: string }`, write `render(state)` that returns `Loading`, the data, or `Error: ` plus the error.",
+        starterCode: `type State =
+  | { status: "loading" }
+  | { status: "success"; data: string }
+  | { status: "error"; error: string };
+
+function render(state: State): string {
+  return "";
+}
+`,
+        solution: `type State =
+  | { status: "loading" }
+  | { status: "success"; data: string }
+  | { status: "error"; error: string };
+
+function render(state: State): string {
+  switch (state.status) {
+    case "loading":
+      return "Loading";
+    case "success":
+      return state.data;
+    case "error":
+      return "Error: " + state.error;
+  }
+}
+`,
+        hints: ["Switch on state.status.", "Only the success branch has data."],
+        tests: [
+          {
+            id: "loading",
+            description: "loading",
+            expression: 'render({ status: "loading" }) === "Loading"',
+          },
+          {
+            id: "success",
+            description: "success",
+            expression: 'render({ status: "success", data: "Ada" }) === "Ada"',
+          },
+          {
+            id: "error",
+            description: "error",
+            expression: 'render({ status: "error", error: "nope" }) === "Error: nope"',
+          },
+        ],
+      },
+      {
+        id: "impossible-states",
+        type: "multiple-choice",
+        title: "Why not a pile of booleans?",
+        prompt:
+          "Why is `{ data?: string; error?: string; loading: boolean }` a weaker model than a discriminated union?",
+        solution: "It allows impossible states, such as loading and error at the same time.",
+        hints: ["Think about states that cannot happen together.", "A tag makes those unrepresentable."],
+        choices: [
+          { id: "a", label: "Booleans cannot be used in TypeScript objects", correct: false },
+          {
+            id: "b",
+            label: "It allows impossible states, such as loading and error at once",
+            correct: true,
+          },
+          { id: "c", label: "Unions cannot be used for UI state", correct: false },
+          { id: "d", label: "Optional fields are illegal on objects", correct: false },
         ],
       },
     ],
@@ -436,6 +581,54 @@ function toPublic(user: User): Pick<User, "id" | "name"> {
             expression:
               'JSON.stringify(toPublic({ id: "1", name: "Ada", password: "x" })) === JSON.stringify({ id: "1", name: "Ada" })',
           },
+        ],
+      },
+      {
+        id: "apply-user-patch",
+        type: "write-code",
+        title: "Apply a partial patch",
+        prompt:
+          "Write `applyPatch(user, patch)` that returns a new user with patch fields overlaid. Empty patch should leave the user unchanged.",
+        starterCode: `type User = { id: string; name: string; email: string };
+
+function applyPatch(user: User, patch: Partial<User>): User {
+  return user;
+}
+`,
+        solution: `type User = { id: string; name: string; email: string };
+
+function applyPatch(user: User, patch: Partial<User>): User {
+  return { ...user, ...patch };
+}
+`,
+        hints: ["Spread user first, then patch.", "Partial<User> means every field is optional."],
+        tests: [
+          {
+            id: "name",
+            description: "overlays name",
+            expression:
+              'applyPatch({ id: "1", name: "Ada", email: "a@x.com" }, { name: "Ada Lovelace" }).name === "Ada Lovelace"',
+          },
+          {
+            id: "keep",
+            description: "keeps email when omitted",
+            expression:
+              'applyPatch({ id: "1", name: "Ada", email: "a@x.com" }, { name: "A" }).email === "a@x.com"',
+          },
+        ],
+      },
+      {
+        id: "omit-meaning",
+        type: "multiple-choice",
+        title: "What does Omit do?",
+        prompt: "What is `Omit<User, \"passwordHash\">`?",
+        solution: "User without the passwordHash key.",
+        hints: ["Omit drops keys.", "Pick keeps keys."],
+        choices: [
+          { id: "a", label: "User with only passwordHash", correct: false },
+          { id: "b", label: "User without the passwordHash key", correct: true },
+          { id: "c", label: "User with every field optional", correct: false },
+          { id: "d", label: "A runtime function that deletes the field", correct: false },
         ],
       },
     ],

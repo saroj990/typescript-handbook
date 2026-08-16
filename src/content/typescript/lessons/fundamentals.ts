@@ -101,6 +101,40 @@ console.log(name, year, active);
           },
         ],
       },
+      {
+        id: "parse-age",
+        type: "write-code",
+        title: "Parse a string into a number",
+        prompt:
+          "Write `parseAge(raw: string): number` that converts the string with `Number(raw)`. `parseAge(\"37\")` should be `37`.",
+        starterCode: `function parseAge(raw) {
+  return 0;
+}
+`,
+        solution: `function parseAge(raw: string): number {
+  return Number(raw);
+}
+`,
+        hints: ["The parameter is a string from a form.", "Number(raw) converts it."],
+        tests: [
+          { id: "ada", description: 'parseAge("37") === 37', expression: 'parseAge("37") === 37' },
+          { id: "zero", description: 'parseAge("0") === 0', expression: 'parseAge("0") === 0' },
+        ],
+      },
+      {
+        id: "wrapper-types",
+        type: "multiple-choice",
+        title: "Which type should you write?",
+        prompt: "You want a variable to hold the text `\"Ada\"`. Which annotation is the everyday TypeScript choice?",
+        solution: "string — the lowercase primitive, not the String wrapper.",
+        hints: ["Avoid Number, String, and Boolean wrappers.", "Everyday types match JavaScript primitives."],
+        choices: [
+          { id: "a", label: "String", correct: false },
+          { id: "b", label: "string", correct: true },
+          { id: "c", label: "text", correct: false },
+          { id: "d", label: "Object", correct: false },
+        ],
+      },
     ],
     takeaways: [
       "Use lowercase primitive types.",
@@ -201,6 +235,39 @@ console.log("distance hint", point[0] * point[0] + point[1] * point[1]);
             expression:
               'JSON.stringify(splitName("Ada Lovelace")) === JSON.stringify(["Ada", "Lovelace"])',
           },
+        ],
+      },
+      {
+        id: "sum-scores",
+        type: "write-code",
+        title: "Sum a number array",
+        prompt: "Write `sumScores(scores: number[]): number` that returns the total of every score.",
+        starterCode: `function sumScores(scores: number[]): number {
+  return 0;
+}
+`,
+        solution: `function sumScores(scores: number[]): number {
+  return scores.reduce((total, score) => total + score, 0);
+}
+`,
+        hints: ["Loop or use reduce.", "Start from 0 so an empty list is 0."],
+        tests: [
+          { id: "basic", description: "sumScores([10, 20, 5]) === 35", expression: "sumScores([10, 20, 5]) === 35" },
+          { id: "empty", description: "sumScores([]) === 0", expression: "sumScores([]) === 0" },
+        ],
+      },
+      {
+        id: "tuple-vs-array",
+        type: "multiple-choice",
+        title: "Tuple or array?",
+        prompt: "You need a pair where index 0 is always x and index 1 is always y. Which type is the better fit?",
+        solution: "[number, number] — a tuple fixes length and position.",
+        hints: ["Arrays are lists of one element type.", "Tuples give positions meaning."],
+        choices: [
+          { id: "a", label: "number[]", correct: false },
+          { id: "b", label: "[number, number]", correct: true },
+          { id: "c", label: "(string | number)[]", correct: false },
+          { id: "d", label: "Array<unknown>", correct: false },
         ],
       },
     ],
@@ -316,6 +383,50 @@ function fullName(person: Person): string {
           },
         ],
       },
+      {
+        id: "optional-email",
+        type: "write-code",
+        title: "Handle an optional email",
+        prompt:
+          "Write `contactLine(user: { name: string; email?: string }): string`. If email exists, return `name <email>`. Otherwise return just the name.",
+        starterCode: `function contactLine(user) {
+  return "";
+}
+`,
+        solution: `function contactLine(user: { name: string; email?: string }): string {
+  if (user.email) return user.name + " <" + user.email + ">";
+  return user.name;
+}
+`,
+        hints: ["email is optional, so check it first.", "The format is name <email>."],
+        tests: [
+          {
+            id: "with-email",
+            description: "includes email when present",
+            expression:
+              'contactLine({ name: "Ada", email: "ada@example.com" }) === "Ada <ada@example.com>"',
+          },
+          {
+            id: "no-email",
+            description: "falls back to the name",
+            expression: 'contactLine({ name: "Ada" }) === "Ada"',
+          },
+        ],
+      },
+      {
+        id: "interface-or-type",
+        type: "multiple-choice",
+        title: "What is an object type for?",
+        prompt: "Why do we name a shape with `type User` or `interface User` instead of repeating fields?",
+        solution: "It is a reusable contract: every function can depend on the same shape.",
+        hints: ["Think about shared API responses and props.", "A name is a contract."],
+        choices: [
+          { id: "a", label: "It makes the fields exist at runtime after compile", correct: false },
+          { id: "b", label: "It is a reusable contract for the same object shape", correct: true },
+          { id: "c", label: "It is required before you can use an object literal", correct: false },
+          { id: "d", label: "It encrypts the property names", correct: false },
+        ],
+      },
     ],
     takeaways: [
       "Name object shapes with type or interface.",
@@ -421,6 +532,47 @@ This is a union of string literals. It is one of the most useful patterns in UI 
             description: "string input",
             expression: 'toIdString("7") === "7"',
           },
+        ],
+      },
+      {
+        id: "status-label",
+        type: "write-code",
+        title: "Label a status union",
+        prompt:
+          "Write `statusLabel(status: \"idle\" | \"loading\" | \"error\"): string` that returns `Idle`, `Loading…`, or `Failed`.",
+        starterCode: `function statusLabel(status) {
+  return "";
+}
+`,
+        solution: `function statusLabel(status: "idle" | "loading" | "error"): string {
+  if (status === "idle") return "Idle";
+  if (status === "loading") return "Loading…";
+  return "Failed";
+}
+`,
+        hints: ["Compare against each literal.", "A small if/else or switch is enough."],
+        tests: [
+          { id: "idle", description: "idle", expression: 'statusLabel("idle") === "Idle"' },
+          {
+            id: "loading",
+            description: "loading",
+            expression: 'statusLabel("loading") === "Loading…"',
+          },
+          { id: "error", description: "error", expression: 'statusLabel("error") === "Failed"' },
+        ],
+      },
+      {
+        id: "union-meaning",
+        type: "multiple-choice",
+        title: "What does a union mean?",
+        prompt: "What does `type Id = string | number` allow?",
+        solution: "A value that is a string or a number, not both at once.",
+        hints: ["A union is one of the members.", "It is not a pair of both types."],
+        choices: [
+          { id: "a", label: "A value that is a string and a number at the same time", correct: false },
+          { id: "b", label: "A value that is a string or a number, not both at once", correct: true },
+          { id: "c", label: "An array of strings and numbers", correct: false },
+          { id: "d", label: "A type that TypeScript will treat as any", correct: false },
         ],
       },
     ],
@@ -529,6 +681,51 @@ console.log(padLeft("-->"));
             description: "string branch",
             expression: 'format("ts") === "TS"',
           },
+        ],
+      },
+      {
+        id: "value-length",
+        type: "write-code",
+        title: "Length of a string or array",
+        prompt:
+          "Write `valueLength(value: string | string[]): number`. Return `value.length` after narrowing if you want, or just read `.length` which both have.",
+        starterCode: `function valueLength(value: string | string[]): number {
+  return 0;
+}
+`,
+        solution: `function valueLength(value: string | string[]): number {
+  return value.length;
+}
+`,
+        hints: ["Both strings and arrays have length.", "You can return value.length directly."],
+        tests: [
+          { id: "str", description: 'valueLength("Ada") === 3', expression: 'valueLength("Ada") === 3' },
+          {
+            id: "arr",
+            description: 'valueLength(["a", "b"]) === 2',
+            expression: 'valueLength(["a", "b"]) === 2',
+          },
+        ],
+      },
+      {
+        id: "narrow-fix",
+        type: "fix-bug",
+        title: "Fix the missing narrow",
+        prompt:
+          "`printId` should return the id in uppercase when it is a string, or `n=` plus the number otherwise. Use `typeof` instead of assuming it is always a string.",
+        starterCode: `function printId(id: string | number): string {
+  return id.toUpperCase();
+}
+`,
+        solution: `function printId(id: string | number): string {
+  if (typeof id === "string") return id.toUpperCase();
+  return "n=" + id;
+}
+`,
+        hints: ["toUpperCase exists only on strings.", "Use typeof id === \"string\"."],
+        tests: [
+          { id: "str", description: "string branch", expression: 'printId("ada") === "ADA"' },
+          { id: "num", description: "number branch", expression: 'printId(7) === "n=7"' },
         ],
       },
     ],

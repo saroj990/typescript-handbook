@@ -119,9 +119,16 @@ export function LessonPage() {
           ),
         )}
 
-        {lesson.exercises.map((exercise) => (
-          <ExercisePanel key={exercise.id} lessonId={lesson.id} exercise={exercise} />
-        ))}
+        <section className="mt-10">
+          <h2 className="text-xl font-semibold">Hands-on practice</h2>
+          <p className="mt-2 text-[var(--text-muted)]">
+            Work through these assignments to lock in the lesson. Each one has hints and a
+            solution if you get stuck.
+          </p>
+          {lesson.exercises.map((exercise) => (
+            <ExercisePanel key={exercise.id} lessonId={lesson.id} exercise={exercise} />
+          ))}
+        </section>
 
         <section className="mt-10">
           <h2 className="text-xl font-semibold">Key takeaways</h2>
@@ -163,7 +170,7 @@ export function LessonPage() {
             {headings.map((heading) => (
               <li key={heading}>{heading}</li>
             ))}
-            <li>Exercises</li>
+            <li>Hands-on practice</li>
             <li>Key takeaways</li>
           </ul>
         </div>

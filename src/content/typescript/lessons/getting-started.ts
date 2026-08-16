@@ -89,6 +89,49 @@ Teams adopt TypeScript so editors can autocomplete safely, refactors do not sile
           { id: "d", label: "The original .ts file", correct: false },
         ],
       },
+      {
+        id: "write-greet",
+        type: "write-code",
+        title: "Write a typed greeting",
+        prompt:
+          "Write `greet(name: string): string` that returns `Hello, ` plus the name. `greet(\"Ada\")` should be `Hello, Ada`.",
+        starterCode: `function greet(name) {
+  return "";
+}
+`,
+        solution: `function greet(name: string): string {
+  return "Hello, " + name;
+}
+`,
+        hints: ["Add a string parameter type.", "Return Hello, plus the name."],
+        tests: [
+          {
+            id: "ada",
+            description: 'greet("Ada") === "Hello, Ada"',
+            expression: 'greet("Ada") === "Hello, Ada"',
+          },
+          {
+            id: "ts",
+            description: 'greet("TypeScript") === "Hello, TypeScript"',
+            expression: 'greet("TypeScript") === "Hello, TypeScript"',
+          },
+        ],
+      },
+      {
+        id: "types-erased",
+        type: "multiple-choice",
+        title: "What happens to types at runtime?",
+        prompt:
+          "After TypeScript compiles your code, what happens to annotations like `: string`?",
+        solution: "They are erased. The running program is JavaScript.",
+        hints: ["Types are a compile-time tool.", "Node and the browser run JavaScript."],
+        choices: [
+          { id: "a", label: "They stay on values so you can read them with typeof", correct: false },
+          { id: "b", label: "They are erased. The running program is JavaScript", correct: true },
+          { id: "c", label: "They become runtime checks that throw on mismatch", correct: false },
+          { id: "d", label: "The browser loads them from a hidden .d.ts file", correct: false },
+        ],
+      },
     ],
     takeaways: [
       "TypeScript is JavaScript with a static type system.",
@@ -190,6 +233,44 @@ console.log(add(10, 5));
           { id: "sum2", description: "add(10, 5) === 15", expression: "add(10, 5) === 15" },
         ],
       },
+      {
+        id: "typed-multiply",
+        type: "write-code",
+        title: "Write a number-only multiply",
+        prompt: "Write `multiply(a: number, b: number): number` that returns the product.",
+        starterCode: `function multiply(a, b) {
+  return 0;
+}
+`,
+        solution: `function multiply(a: number, b: number): number {
+  return a * b;
+}
+`,
+        hints: ["Both parameters should be number.", "Return a * b."],
+        tests: [
+          { id: "basic", description: "multiply(3, 4) === 12", expression: "multiply(3, 4) === 12" },
+          { id: "zero", description: "multiply(7, 0) === 0", expression: "multiply(7, 0) === 0" },
+        ],
+      },
+      {
+        id: "js-coercion",
+        type: "predict-output",
+        title: "Predict the untyped result",
+        prompt:
+          "In JavaScript, `+` concatenates if either side is a string. What does this program print?",
+        starterCode: `function add(a, b) {
+  return a + b;
+}
+
+console.log(add(2, "3"));
+`,
+        expectedOutput: "23",
+        solution: '23 — JavaScript coerces 2 to "2" and concatenates.',
+        hints: [
+          "One argument is a string, so + does not add numbers.",
+          "The printed value is the string 23, not the number 5.",
+        ],
+      },
     ],
     takeaways: [
       "JavaScript allows implicit coercions that TypeScript can reject.",
@@ -283,6 +364,51 @@ console.log(typeof pages, published);
           { id: "b", label: "number[]", correct: true },
           { id: "c", label: "tuple [1, 2, 3]", correct: false },
           { id: "d", label: "unknown[]", correct: false },
+        ],
+      },
+      {
+        id: "label-score",
+        type: "write-code",
+        title: "Annotate the function boundary",
+        prompt:
+          "Write `labelScore(score: number): string` that returns `Score: ` plus the number. Let local values stay inferred.",
+        starterCode: `function labelScore(score) {
+  return "";
+}
+`,
+        solution: `function labelScore(score: number): string {
+  return "Score: " + score;
+}
+`,
+        hints: ["Annotate the parameter and return type.", "Concatenate Score: with the number."],
+        tests: [
+          {
+            id: "ten",
+            description: 'labelScore(10) === "Score: 10"',
+            expression: 'labelScore(10) === "Score: 10"',
+          },
+          {
+            id: "zero",
+            description: 'labelScore(0) === "Score: 0"',
+            expression: 'labelScore(0) === "Score: 0"',
+          },
+        ],
+      },
+      {
+        id: "uninitialized-let",
+        type: "multiple-choice",
+        title: "What is an uninitialized let?",
+        prompt: "What does TypeScript infer for `let value;` with no annotation and no initializer?",
+        solution: "any, unless you annotate it.",
+        hints: [
+          "There is no value to infer from.",
+          "The lesson warns that this becomes any.",
+        ],
+        choices: [
+          { id: "a", label: "undefined", correct: false },
+          { id: "b", label: "any, unless you annotate it", correct: true },
+          { id: "c", label: "unknown", correct: false },
+          { id: "d", label: "never", correct: false },
         ],
       },
     ],

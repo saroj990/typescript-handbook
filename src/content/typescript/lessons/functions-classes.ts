@@ -98,6 +98,40 @@ console.log(ids.join(", "));
           },
         ],
       },
+      {
+        id: "greet-optional",
+        type: "write-code",
+        title: "Optional greeting name",
+        prompt:
+          "Write `greet(name?: string): string`. If name is provided, return `Hello, ` plus the name. Otherwise return `Hello`.",
+        starterCode: `function greet(name) {
+  return "";
+}
+`,
+        solution: `function greet(name?: string): string {
+  return name ? "Hello, " + name : "Hello";
+}
+`,
+        hints: ["Mark the parameter optional with `?`.", "Check whether name was passed."],
+        tests: [
+          { id: "named", description: 'greet("Ada") === "Hello, Ada"', expression: 'greet("Ada") === "Hello, Ada"' },
+          { id: "anon", description: 'greet() === "Hello"', expression: 'greet() === "Hello"' },
+        ],
+      },
+      {
+        id: "avoid-function-type",
+        type: "multiple-choice",
+        title: "Why avoid the Function type?",
+        prompt: "Why is typing a callback as `Function` a problem?",
+        solution: "It accepts any function and is almost as unsafe as any.",
+        hints: ["Function is a wide built-in.", "You lose parameter and return checking."],
+        choices: [
+          { id: "a", label: "Function is not valid TypeScript syntax", correct: false },
+          { id: "b", label: "It accepts any function and is almost as unsafe as any", correct: true },
+          { id: "c", label: "It only works with class methods", correct: false },
+          { id: "d", label: "It forces the callback to return void", correct: false },
+        ],
+      },
     ],
     takeaways: [
       "Type the public surface of functions.",
@@ -200,6 +234,56 @@ console.log(counter.inc());
             description: "adds to the balance",
             expression: "new Balance(10).add(5) === 15",
           },
+        ],
+      },
+      {
+        id: "counter-inc",
+        type: "write-code",
+        title: "Build a Counter class",
+        prompt:
+          "Write a `Counter` class with `constructor(private value = 0)`, `inc(): number` that adds 1 and returns the new value, and `current(): number` that returns the value.",
+        starterCode: `class Counter {
+}
+`,
+        solution: `class Counter {
+  constructor(private value = 0) {}
+
+  inc(): number {
+    this.value += 1;
+    return this.value;
+  }
+
+  current(): number {
+    return this.value;
+  }
+}
+`,
+        hints: ["Store value as a parameter property.", "inc should mutate and return."],
+        tests: [
+          {
+            id: "inc",
+            description: "increments from 0",
+            expression: "new Counter().inc() === 1",
+          },
+          {
+            id: "current",
+            description: "reads the current value",
+            expression: "(() => { const c = new Counter(4); c.inc(); return c.current() === 5; })()",
+          },
+        ],
+      },
+      {
+        id: "private-runtime",
+        type: "multiple-choice",
+        title: "Is private a security boundary?",
+        prompt: "What does `private` mean after TypeScript compiles the class?",
+        solution: "It is a compile-time check. The field still exists on the JavaScript object.",
+        hints: ["Modifiers are erased with the rest of the type system.", "They document the intended API."],
+        choices: [
+          { id: "a", label: "The field is deleted from the emitted JavaScript", correct: false },
+          { id: "b", label: "It is a compile-time check. The field still exists at runtime", correct: true },
+          { id: "c", label: "Other files cannot read the field even in JavaScript", correct: false },
+          { id: "d", label: "It encrypts the property name", correct: false },
         ],
       },
     ],

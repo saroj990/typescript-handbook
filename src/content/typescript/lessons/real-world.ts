@@ -117,6 +117,53 @@ function unwrapOr<T>(result: Result<T>, fallback: T): T {
           },
         ],
       },
+      {
+        id: "parse-age-result",
+        type: "write-code",
+        title: "Parse age as a Result",
+        prompt:
+          "Write `parseAge(raw: string)` that returns `{ success: true, data: number }` when `Number(raw)` is not NaN, otherwise `{ success: false, error: \"Not a number\" }`.",
+        starterCode: `function parseAge(raw) {
+  return { success: false, error: "todo" };
+}
+`,
+        solution: `function parseAge(raw: string) {
+  const value = Number(raw);
+  if (Number.isNaN(value)) {
+    return { success: false, error: "Not a number" };
+  }
+  return { success: true, data: value };
+}
+`,
+        hints: ["Use Number(raw) and Number.isNaN.", "Success carries data, failure carries error."],
+        tests: [
+          {
+            id: "ok",
+            description: "parses 37",
+            expression: "parseAge(\"37\").success === true && parseAge(\"37\").data === 37",
+          },
+          {
+            id: "err",
+            description: "rejects nope",
+            expression:
+              'parseAge("nope").success === false && parseAge("nope").error === "Not a number"',
+          },
+        ],
+      },
+      {
+        id: "when-not-result",
+        type: "multiple-choice",
+        title: "When should you not use Result?",
+        prompt: "Which failures should still throw instead of becoming a Result?",
+        solution: "Programming errors / bugs. Use Result for expected failures such as validation.",
+        hints: ["Result is for expected failure.", "Bugs can still throw."],
+        choices: [
+          { id: "a", label: "Validation errors from a form", correct: false },
+          { id: "b", label: "Programming errors and bugs", correct: true },
+          { id: "c", label: "A user that was not found", correct: false },
+          { id: "d", label: "A declined payment", correct: false },
+        ],
+      },
     ],
     takeaways: [
       "Result makes expected failure visible.",
@@ -216,6 +263,48 @@ console.log(renderButton({ label: "Save", disabled: true }));
             description: "formats the card",
             expression: 'renderCard({ title: "Ada", body: "Pioneer" }) === "Ada: Pioneer"',
           },
+        ],
+      },
+      {
+        id: "render-button",
+        type: "write-code",
+        title: "Type a button helper",
+        prompt:
+          "Write `renderButton({ label, disabled = false })` that returns `label + \" (disabled)\"` when disabled, otherwise just the label.",
+        starterCode: `function renderButton(props) {
+  return "";
+}
+`,
+        solution: `function renderButton({ label, disabled = false }: { label: string; disabled?: boolean }): string {
+  return disabled ? label + " (disabled)" : label;
+}
+`,
+        hints: ["Give props a label and optional disabled.", "Default disabled to false."],
+        tests: [
+          {
+            id: "enabled",
+            description: "enabled label",
+            expression: 'renderButton({ label: "Save" }) === "Save"',
+          },
+          {
+            id: "disabled",
+            description: "disabled suffix",
+            expression: 'renderButton({ label: "Save", disabled: true }) === "Save (disabled)"',
+          },
+        ],
+      },
+      {
+        id: "usestate-infer",
+        type: "multiple-choice",
+        title: "Does useState(0) need an annotation?",
+        prompt: "You write `useState(0)`. What type does TypeScript infer for the state?",
+        solution: "number — the initial value is enough.",
+        hints: ["Inference reads the initializer.", "You annotate when the initial value is not enough."],
+        choices: [
+          { id: "a", label: "any, because React cannot infer hooks", correct: false },
+          { id: "b", label: "number — the initial value is enough", correct: true },
+          { id: "c", label: "unknown until you pass a generic", correct: false },
+          { id: "d", label: "0, a numeric literal that can never change", correct: false },
         ],
       },
     ],
@@ -329,6 +418,59 @@ console.log(readUser({ id: "1", name: "Ada" }).name);
             description: "rejects a string",
             expression: 'isPoint("no") === false',
           },
+        ],
+      },
+      {
+        id: "is-user",
+        type: "write-code",
+        title: "Validate a user object",
+        prompt:
+          "Write `isUser(value: unknown): boolean` that is true only for a non-null object with string `id` and string `name`.",
+        starterCode: `function isUser(value: unknown): boolean {
+  return false;
+}
+`,
+        solution: `function isUser(value: unknown): boolean {
+  if (typeof value !== "object" || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return typeof record.id === "string" && typeof record.name === "string";
+}
+`,
+        hints: ["Reject null and non-objects first.", "Check typeof id and name."],
+        tests: [
+          {
+            id: "yes",
+            description: "accepts a user",
+            expression: 'isUser({ id: "1", name: "Ada" }) === true',
+          },
+          {
+            id: "null",
+            description: "rejects null",
+            expression: "isUser(null) === false",
+          },
+          {
+            id: "partial",
+            description: "rejects a missing name",
+            expression: 'isUser({ id: "1" }) === false',
+          },
+        ],
+      },
+      {
+        id: "assertion-trap",
+        type: "multiple-choice",
+        title: "Why is `as User` unsafe on JSON?",
+        prompt: "You write `const user = (await response.json()) as User`. What is the risk?",
+        solution: "The assertion does not validate. A missing email still crashes later.",
+        hints: ["Types are erased.", "as is a compile-time claim, not a check."],
+        choices: [
+          { id: "a", label: "json() cannot be awaited", correct: false },
+          {
+            id: "b",
+            label: "The assertion does not validate. Missing fields still crash later",
+            correct: true,
+          },
+          { id: "c", label: "User types are illegal after fetch", correct: false },
+          { id: "d", label: "as User converts the JSON into a class instance", correct: false },
         ],
       },
     ],
@@ -469,6 +611,90 @@ function openTodos(list: Todo[]): Todo[] {
             description: "filters open todos",
             expression:
               'openTodos([{ id: "1", title: "A", status: "open" }, { id: "2", title: "B", status: "done" }]).length === 1',
+          },
+        ],
+      },
+      {
+        id: "toggle-todo",
+        type: "write-code",
+        title: "Toggle a todo status",
+        prompt:
+          "Write `toggle(todo: Todo): Todo` that returns a new todo flipped between `open` and `done`. Do not mutate the original.",
+        starterCode: `type Status = "open" | "done";
+interface Todo {
+  id: string;
+  title: string;
+  status: Status;
+}
+
+function toggle(todo: Todo): Todo {
+  return todo;
+}
+`,
+        solution: `type Status = "open" | "done";
+interface Todo {
+  id: string;
+  title: string;
+  status: Status;
+}
+
+function toggle(todo: Todo): Todo {
+  return { ...todo, status: todo.status === "open" ? "done" : "open" };
+}
+`,
+        hints: ["Return a new object.", "If it is open, make it done, and the other way around."],
+        tests: [
+          {
+            id: "open-to-done",
+            description: "open becomes done",
+            expression: 'toggle({ id: "1", title: "A", status: "open" }).status === "done"',
+          },
+          {
+            id: "done-to-open",
+            description: "done becomes open",
+            expression: 'toggle({ id: "1", title: "A", status: "done" }).status === "open"',
+          },
+        ],
+      },
+      {
+        id: "count-open",
+        type: "write-code",
+        title: "Count open todos",
+        prompt: "Write `countOpen(list: Todo[]): number` that returns how many todos are still open.",
+        starterCode: `type Status = "open" | "done";
+interface Todo {
+  id: string;
+  title: string;
+  status: Status;
+}
+
+function countOpen(list: Todo[]): number {
+  return 0;
+}
+`,
+        solution: `type Status = "open" | "done";
+interface Todo {
+  id: string;
+  title: string;
+  status: Status;
+}
+
+function countOpen(list: Todo[]): number {
+  return list.filter((todo) => todo.status === "open").length;
+}
+`,
+        hints: ["Filter by status === \"open\".", "Return the length of that list."],
+        tests: [
+          {
+            id: "mixed",
+            description: "counts only open items",
+            expression:
+              'countOpen([{ id: "1", title: "A", status: "open" }, { id: "2", title: "B", status: "done" }, { id: "3", title: "C", status: "open" }]) === 2',
+          },
+          {
+            id: "none",
+            description: "empty list is 0",
+            expression: "countOpen([]) === 0",
           },
         ],
       },
