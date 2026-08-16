@@ -18,10 +18,10 @@ export function MarkdownContent({ markdown }: MarkdownContentProps) {
           code({ className, children }) {
             const text = String(children).replace(/\n$/, "");
             const language = /language-(\w+)/.exec(className ?? "")?.[1];
-            if (!language) {
+            if (!language && !text.includes("\n")) {
               return <code>{text}</code>;
             }
-            return <CodeBlock code={text} language={language} />;
+            return <CodeBlock code={text} language={language ?? "ts"} />;
           },
         }}
       >

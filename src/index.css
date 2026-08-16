@@ -128,7 +128,9 @@ textarea {
   margin-top: 0.35rem;
 }
 
-.prose-lesson code {
+.prose-lesson :not(.code-block) > code,
+.prose-lesson p code,
+.prose-lesson li code {
   font-family: var(--font-mono);
   font-size: 0.9em;
   background: var(--bg-muted);
@@ -137,22 +139,81 @@ textarea {
   padding: 0.1rem 0.35rem;
 }
 
-.prose-lesson pre {
+.prose-lesson pre:not(.code-block-pre) {
   overflow-x: auto;
   background: #0f172a;
   color: #e2e8f0;
   border-radius: 0.85rem;
-  padding: 1rem 1.1rem;
+  padding: 1rem 1.25rem;
   margin: 1rem 0;
   border: 1px solid #1e293b;
 }
 
-.prose-lesson pre code {
+.prose-lesson .code-block pre,
+.prose-lesson .code-block code {
   background: transparent;
   border: 0;
-  padding: 0;
+  margin: 0;
+  border-radius: 0;
   color: inherit;
-  font-size: 0.86rem;
+}
+
+.code-block-pre {
+  padding: 1rem 1.25rem;
+}
+
+.code-block-code {
+  padding: 0 0.25rem;
+  display: block;
+  min-width: max-content;
+}
+
+.code-block .hljs-keyword,
+.code-block .hljs-selector-tag,
+.code-block .hljs-literal {
+  color: #569cd6;
+}
+
+.code-block .hljs-built_in,
+.code-block .hljs-type,
+.code-block .hljs-class .hljs-title {
+  color: #4ec9b0;
+}
+
+.code-block .hljs-string {
+  color: #ce9178;
+}
+
+.code-block .hljs-number {
+  color: #b5cea8;
+}
+
+.code-block .hljs-comment,
+.code-block .hljs-quote {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.code-block .hljs-title,
+.code-block .hljs-title.function_ {
+  color: #dcdcaa;
+}
+
+.code-block .hljs-variable,
+.code-block .hljs-params,
+.code-block .hljs-property,
+.code-block .hljs-attr {
+  color: #9cdcfe;
+}
+
+.code-block .hljs-meta,
+.code-block .hljs-doctag {
+  color: #569cd6;
+}
+
+.code-block .hljs-punctuation,
+.code-block .hljs-operator {
+  color: #d4d4d4;
 }
 
 .prose-lesson blockquote {
